@@ -1,0 +1,6 @@
+# action.yml
+name: 'Swagger Validate'
+description: 'Validates OpenAPI 2.x/3.x file'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
