@@ -1,6 +1,7 @@
 # Container image that runs your code
 FROM swaggerapi/swagger-editor
 ENV SWAGGER_FILE=examples/openapi-3-0-1.yaml
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 # Installs latest Chromium package.
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories \
