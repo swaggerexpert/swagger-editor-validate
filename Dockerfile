@@ -5,5 +5,5 @@ FROM swaggerapi/swagger-editor
 COPY entrypoint.sh /entrypoint.sh
 COPY index.js /index.js
 
-# Code file to execute when the docker container starts up (`entrypoint.js`)
-ENTRYPOINT ["/entrypoint.js"]
+# Code file to execute when the docker container starts up (`entrypoint.sh`)
+ENTRYPOINT ["/entrypoint.sh"]
