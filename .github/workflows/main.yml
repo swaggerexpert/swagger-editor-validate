@@ -7,4 +7,4 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: char0n/swagger-validate-github-action@v1
+        uses: char0n/swagger-validate-github-action
