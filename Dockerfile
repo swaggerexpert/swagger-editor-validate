@@ -1,5 +1,6 @@
 # Container image that runs your code
 FROM swaggerapi/swagger-editor
+ENV SWAGGER_FILE=examples/openapi-3-0-1.yaml
 
 RUN apk update && apk add nodejs
 
