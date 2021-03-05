@@ -4,7 +4,17 @@ jobs:
   hello_world_job:
     runs-on: ubuntu-latest
     name: A job to say hello
+
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      swagger-editor:
+        # Docker Hub image
+        image: swaggerapi/swagger-editor
+        # Set health checks to wait until redis has started
+        ports:
+          # Maps port 6379 on service container to the host
+          - 80:8080
+
     steps:
       - name: Hello world action step
-        id: hello
-        uses: char0n/swagger-validate-github-action@master
