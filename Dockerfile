@@ -3,7 +3,7 @@ FROM swaggerapi/swagger-editor
 ENV SWAGGER_FILE=examples/openapi-3-0-1.yaml
 
 RUN apk update && apk add nodejs nodejs-npm
-RUN npm i puppeteer
+RUN npm i puppeteer -g
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
 COPY entrypoint.sh /entrypoint.sh
