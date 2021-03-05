@@ -2,7 +2,7 @@
 FROM swaggerapi/swagger-editor
 ENV SWAGGER_FILE=examples/openapi-3-0-1.yaml
 
-RUN apk update && apk add nodejs nodejs-npm
+RUN apk update && apk add nodejs nodejs-npm chromium-browser
 RUN npm i puppeteer --no-save
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
