@@ -2,7 +2,7 @@
 FROM swaggerapi/swagger-editor
 ENV SWAGGER_FILE=examples/openapi-3-0-1.yaml
 
-# Install latest Chromium package
+# Installs latest Chromium package.
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories \
     && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
@@ -21,7 +21,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositorie
     && mkdir /var/cache/apk
 
 # Install puppetter
-RUN apk update && apk add nodejs
+RUN apk update && apk add nodejs nodejs-npm
 RUN npm i puppeteer --no-save
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
