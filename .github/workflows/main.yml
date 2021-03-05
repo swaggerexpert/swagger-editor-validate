@@ -10,17 +10,11 @@ jobs:
       # Label used to access the service container
       swagger-editor:
         # Docker Hub image
-        image: swaggerapi:swagger-editor
-        # Set health checks to wait until redis has started
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        image: swaggerapi/swagger-editor
         ports:
           # Maps port 8080 on service container to the host 80
           - 80:8080
 
     steps:
       - name: Hello world action step
-        run: echo Hello
+        run: Hello
