@@ -1,3 +1,4 @@
 #!/bin/sh -l
 
-echo "Hello world"
+echo "Validating..."
+node /index.js
