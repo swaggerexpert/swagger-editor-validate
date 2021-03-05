@@ -2,8 +2,7 @@
 FROM swaggerapi/swagger-editor
 
 # Install node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash - \\
-    && sudo apt-get install -y nodejs
+RUN sudo apt-get install -y nodejs
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
 COPY entrypoint.sh /entrypoint.sh
