@@ -18,3 +18,4 @@ jobs:
 
     steps:
       - name: Hello world action step
+        run: echo Hello
