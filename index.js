@@ -1,8 +1,5 @@
 'use strict';
 
-const child_process = require('child_process');
-child_process.execSync('npm ci');
-
 const puppeteer = require('puppeteer');
 const core = require('@actions/core');
 

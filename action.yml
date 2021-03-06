@@ -8,4 +8,5 @@ inputs:
     default: 'https://editor.swagger.io/'
 runs:
   using: 'node12'
+  pre: 'setup.js'
   main: 'index.js'
