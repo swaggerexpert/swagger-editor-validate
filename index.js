@@ -14,7 +14,6 @@ const puppeteer = require('puppeteer');
     // no API definition provided
     const noApiDefinition = await page.evaluate(() => {
        const element = document.querySelector('.swagger-ui .loading-container h4');
-       console.dir(element);
        if (element === null) {
            return false;
        }
