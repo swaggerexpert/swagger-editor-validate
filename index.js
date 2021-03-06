@@ -56,7 +56,7 @@ const parseErrors = async (page) => {
 (async () => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  const definitionFilePath = path.join('github', 'workspace', process.env.DEFINITION_FILE);
+  const definitionFilePath = path.join('/github/workspace', process.env.DEFINITION_FILE);
 
   try {
     const definition = fs.readFileSync(definitionFilePath).toString();
