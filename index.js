@@ -59,11 +59,10 @@ const parseErrors = async (page) => {
   const definitionFilePath = path.join('/home/runner/work/swagger-editor-validate/swagger-editor-validate', process.env.DEFINITION_FILE);
 
   try {
-    const definition = fs.readFileSync(definitionFilePath).toString();
-
     await page.goto(process.env.SWAGGER_EDITOR_URL);
     await page.waitForSelector('.info .main .title');
     await page.evaluate(() => {
+      const definition = fs.readFileSync(definitionFilePath).toString();
       localStorage.setItem('swagger-editor-content', definition);
     });
     await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
