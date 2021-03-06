@@ -3,7 +3,7 @@ on: [push]
 jobs:
   test_swagger_editor_validator_service:
     runs-on: ubuntu-latest
-    name: Swagger Editor Validator
+    name: Swagger Editor Validator Service
 
     # Service containers to run with `runner-job`
     services:
@@ -20,5 +20,16 @@ jobs:
       - name: Validate OpenAPI definition
         uses: char0n/swagger-editor-validate@master
         with:
-          swagger-editor-url: http://swagger-editor/
-          definition-file: examples/openapi-3-0-1.yaml
+          swagger-editor-url: http://localhost/
+          definition-file: examples/openapi-2-0.yaml
+
+  test_swagger_editor_validator_remote:
+    runs-on: ubuntu-latest
+    name: Swagger Editor Validator Remote
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate OpenAPI definition
+        uses: char0n/swagger-editor-validate@master
+        with:
+          definition-file: examples/openapi-2-0.yaml
