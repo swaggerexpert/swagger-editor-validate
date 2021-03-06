@@ -1,6 +1,6 @@
 # action.yml
-name: 'Swagger Validate'
-description: 'Validates OpenAPI 2.x/3.x file'
+name: 'Swagger Editor Validator'
+description: 'Validates OpenAPI 2.x/3.x definition file'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node12'
+  main: 'index.js'

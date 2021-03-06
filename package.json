@@ -1,0 +1,27 @@
+{
+  "name": "swagger-editor-validate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "puppeteer": "^8.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/char0n/swagger-editor-validate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/char0n/swagger-editor-validate/issues"
+  },
+  "homepage": "https://github.com/char0n/swagger-editor-validate#readme"
+}
