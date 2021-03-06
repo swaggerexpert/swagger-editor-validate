@@ -7,10 +7,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - uses: docker://swaggerapi/swagger-editor
         env:
           SWAGGER_FILE: "examples/openapi-3-0-1.yaml"
         with:
           entrypoint: /bin/echo
           args: Hello Docker !
+      - run: npm i puppeteer
       - run: node index.js
