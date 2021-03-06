@@ -84,4 +84,7 @@ const parseErrors = async (page) => {
   }
 
   await browser.close();
-})();
+})().catch(error => {
+  core.setFailed('Error while validating in Swagger Editor');
+  core.error(error);
+});
