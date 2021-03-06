@@ -1,7 +1,7 @@
 on: [push]
 
 jobs:
-  test_swagger_editor_validator:
+  test_swagger_editor_validator_service:
     runs-on: ubuntu-latest
     name: Swagger Editor Validator
 
@@ -20,4 +20,5 @@ jobs:
       - name: Validate OpenAPI definition
         uses: char0n/swagger-editor-validate@master
         with:
+          swagger-editor-url: http://swagger-editor/
           definition-file: examples/openapi-3-0-1.yaml
