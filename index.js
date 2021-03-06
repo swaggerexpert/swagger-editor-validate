@@ -57,9 +57,10 @@ const parseErrors = async (page) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   const definitionFilePath = path.join('github', 'workspace', process.env.DEFINITION_FILE);
-  const definition = fs.readFileSync(definitionFilePath).toString();
 
   try {
+    const definition = fs.readFileSync(definitionFilePath).toString();
+
     await page.goto(process.env.SWAGGER_EDITOR_URL);
     await page.waitForSelector('.info .main .title');
     await page.evaluate(() => {
