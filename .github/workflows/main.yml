@@ -21,5 +21,5 @@ jobs:
         with:
           node-version: '14'
       - run: npm i puppeteer
-      - run: npde index.js
+      - run: node index.js
 
