@@ -55,7 +55,8 @@ const parseErrors = async (page) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  await page.goto(core.getInput('swagger-editor-url', { required: false }));
+  core.info(core.getInput('swagger-editor-url'));
+  await page.goto(core.getInput('swagger-editor-url'));
   await page.waitForSelector('.info .main .title');
   await page.evaluate(() => {
     localStorage.setItem('swagger-editor-content', 'swagger: "2.0"');
