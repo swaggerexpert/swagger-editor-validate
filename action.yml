@@ -1,6 +1,11 @@
 # action.yml
 name: 'Swagger Editor Validator'
 description: 'Validates OpenAPI 2.x/3.x definition file'
+inputs:
+  swagger-editor-url:
+    description: 'URL where Swagger Editor is served'
+    required: false
+    default: 'https://editor.swagger.io/'
 runs:
   using: "composite"
   steps:
