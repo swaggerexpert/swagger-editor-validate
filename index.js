@@ -57,8 +57,8 @@ let browser;
   browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-    core.info('URL:' + core.getInput('``swagger-editor-url``'));
-  await page.goto(core.getInput('swagger-editor-url'));
+  core.info('URL:' + core.getInput(process.env.SWAGGER_EDITOR_URL));
+  await page.goto(process.env.SWAGGER_EDITOR_URL);
   await page.waitForSelector('.info .main .title');
   await page.evaluate(() => {
     localStorage.setItem('swagger-editor-content', 'swagger: "2.0"');
