@@ -10,4 +10,4 @@ jobs:
       - uses: docker://swaggerapi/swagger-editor
         env:
           SWAGGER_FILE: "examples/openapi-3-0-1.yaml"
-        run: node index.js
+      - run: node index.js
