@@ -7,9 +7,5 @@ inputs:
     required: false
     default: 'https://editor.swagger.io/'
 runs:
-  using: "composite"
-  steps:
-    - run: npm ci
-      shell: bash
-    - run: node index.js
-      shell: bash
+  using: 'node12'
+  main: 'index.js'

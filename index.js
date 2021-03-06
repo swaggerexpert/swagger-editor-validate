@@ -1,5 +1,8 @@
 'use strict';
 
+const child_process = require('child_process');
+child_process.execSync('npm ci');
+
 const puppeteer = require('puppeteer');
 const core = require('@actions/core');
 
@@ -57,7 +60,7 @@ let browser;
   browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  core.info('URL:' + core.getInput('swagger-editor-url'));
+    core.info('URL:' + core.getInput('``swagger-editor-url``'));
   await page.goto(core.getInput('swagger-editor-url'));
   await page.waitForSelector('.info .main .title');
   await page.evaluate(() => {
