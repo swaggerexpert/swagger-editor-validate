@@ -3,4 +3,5 @@ name: 'Swagger Editor Validator'
 description: 'Validates OpenAPI 2.x/3.x definition file'
 runs:
   using: 'node12'
+  pre: 'setup.js',
   main: 'index.js'
