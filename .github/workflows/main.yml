@@ -5,18 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
 
-#    # Service containers to run with `runner-job`
-#    services:
-#      # Label used to access the service container
-#      swagger-editor:
-#        # Docker Hub image
-#        image: swaggerapi/swagger-editor
-#        ports:
-#          # Maps port 8080 on service container to the host 80
-#          - 80:8080
-
     steps:
       - uses: actions/checkout@v2
       - uses: docker://swaggerapi/swagger-editor
         env:
           SWAGGER_FILE: "examples/openapi-3-0-1.yaml"
+        run: node index.js
