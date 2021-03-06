@@ -10,4 +10,7 @@ jobs:
       - uses: docker://swaggerapi/swagger-editor
         env:
           SWAGGER_FILE: "examples/openapi-3-0-1.yaml"
+        with:
+          entrypoint: /bin/echo
+          args: Hello Docker !
       - run: node index.js
