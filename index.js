@@ -56,15 +56,16 @@ const parseErrors = async (page) => {
 (async () => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  const definitionFilePath = path.join('/home/runner/work/swagger-editor-validate/swagger-editor-validate', process.env.DEFINITION_FILE);
+  const definitionFilePath = path.join(process.env.GITHUB_WORKSPACE, process.env.DEFINITION_FILE);
 
   try {
+    const definition = fs.readFileSync(definitionFilePath).toString();
+
     await page.goto(process.env.SWAGGER_EDITOR_URL);
     await page.waitForSelector('.info .main .title');
-    await page.evaluate(() => {
-      const definition = fs.readFileSync(definitionFilePath).toString();
-      localStorage.setItem('swagger-editor-content', definition);
-    });
+    await page.evaluate((item) => {
+      localStorage.setItem('swagger-editor-content', item);
+    }, definition);
     await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
     await page.waitForSelector('.swagger-ui div', { visible: true });
 
