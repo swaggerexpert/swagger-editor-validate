@@ -51,11 +51,13 @@ const parseErrors = async (page) => {
   return errors;
 };
 
+let browser;
+
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  core.info(core.getInput('swagger-editor-url'));
+  core.info('URL:' + core.getInput('swagger-editor-url'));
   await page.goto(core.getInput('swagger-editor-url'));
   await page.waitForSelector('.info .main .title');
   await page.evaluate(() => {
@@ -88,4 +90,5 @@ const parseErrors = async (page) => {
 })().catch(error => {
   core.setFailed('Error while validating in Swagger Editor');
   core.error(error);
+  return browser.close();
 });
