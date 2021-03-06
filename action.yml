@@ -11,5 +11,5 @@ runs:
   steps:
     - run: npm ci
       shell: bash
-    - run: SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }}node index.js
+    - run: SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} node index.js
       shell: bash
