@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const puppeteer = require('puppeteer');
 const core = require('@actions/core');
 
@@ -51,44 +53,44 @@ const parseErrors = async (page) => {
   return errors;
 };
 
-let browser;
-
 (async () => {
-  browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
+  const definitionFilePath = path.join('github', 'workspace', process.env.DEFINITION_FILE);
+  const definition = fs.readFileSync(definitionFilePath).toString();
 
-  core.info('URL:' + process.env.SWAGGER_EDITOR_URL);
-  await page.goto(process.env.SWAGGER_EDITOR_URL);
-  await page.waitForSelector('.info .main .title');
-  await page.evaluate(() => {
-    localStorage.setItem('swagger-editor-content', 'swagger: "2.0"');
-  });
-  await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
-  await page.waitForSelector('.swagger-ui div', { visible: true });
-
-  if (await hasNoApiDefinition(page)) {
-    // no API definition provided
-    core.setFailed('\u001b[38;2;255;0;0mNo API definition provided.');
-  } else if (await isUnableToRenderDefinition(page)) {
-    // unable to render definition
-    core.setFailed('\u001b[38;2;255;0;0mUnable to render this definition.');
-  } else if (await hasErrors(page)) {
-    // definition has errors
-    core.setFailed('\u001b[38;2;255;0;1mDefinition contains errors.')
-    const errors = await parseErrors(page);
-    errors.forEach(error => {
-      core.error(error.location)
-      error.messages.forEach(message => core.error(message));
-      core.error(`at line ${error.lineNo}`)
-      core.error('');
+  try {
+    await page.goto(process.env.SWAGGER_EDITOR_URL);
+    await page.waitForSelector('.info .main .title');
+    await page.evaluate(() => {
+      localStorage.setItem('swagger-editor-content', definition);
     });
-  } else {
-    core.info('\u001b[1mDefinition successfully validated by Swagger Editor');
-  }
+    await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
+    await page.waitForSelector('.swagger-ui div', { visible: true });
 
-  await browser.close();
-})().catch(error => {
-  core.setFailed('Error while validating in Swagger Editor');
-  core.error(error);
-  return browser.close();
-});
+    if (await hasNoApiDefinition(page)) {
+      // no API definition provided
+      core.setFailed('\u001b[38;2;255;0;0mNo API definition provided.');
+    } else if (await isUnableToRenderDefinition(page)) {
+      // unable to render definition
+      core.setFailed('\u001b[38;2;255;0;0mUnable to render this definition.');
+    } else if (await hasErrors(page)) {
+      // definition has errors
+      core.setFailed('\u001b[38;2;255;0;1mDefinition contains errors.')
+      const errors = await parseErrors(page);
+      errors.forEach(error => {
+        core.error(error.location)
+        error.messages.forEach(message => core.error(message));
+        core.error(`at line ${error.lineNo}`)
+        core.error('');
+      });
+    } else {
+      core.info('\u001b[1mDefinition successfully validated by Swagger Editor');
+    }
+  } catch (error) {
+    core.setFailed('Error while validating in Swagger Editor');
+    core.error(error);
+  } finally {
+    await browser.close();
+  }
+})();
