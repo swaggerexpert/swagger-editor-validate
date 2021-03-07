@@ -1,16 +1,16 @@
 # action.yml
-name: 'Swagger Editor Validator'
-description: 'Validates OpenAPI 2.x/3.x definition file'
+name: Swagger Editor Validator
+description: This GitHub Actions validates OpenAPI (OAS) definition file using Swagger Editor.
 inputs:
   swagger-editor-url:
-    description: 'URL where Swagger Editor is served'
+    description: URL where Swagger Editor is served
     required: false
-    default: 'https://editor.swagger.io/'
+    default: https://editor.swagger.io/
   definition-file:
-    description: 'Path to definition file'
+    description: Path to definition file
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
     - run: npm ci
       shell: bash
