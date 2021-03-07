@@ -7,6 +7,9 @@ If modifications are made to the OAS definition you want to make sure that there
 introduced by modifications. Errors that would appear in Swagger Editor when the OAS definition
 would be pasted inside it.
 
+![image](https://user-images.githubusercontent.com/193286/110244618-dcebe580-7f5f-11eb-8dd8-cb31f499761e.png)
+
+
 ## Inputs
 
 ### `swagger-editor-url`
