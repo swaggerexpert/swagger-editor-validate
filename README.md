@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Validate OpenAPI definition
-        uses: char0n/swagger-editor-validate@master
+        uses: char0n/swagger-editor-validate@v1
         with:
           swagger-editor-url: http://localhost/
           definition-file: examples/openapi-2-0.yaml
