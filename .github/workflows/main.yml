@@ -1,28 +1,15 @@
-name: Swagger Editor Validate CI
+name: Swagger Editor Validate Test CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ test ]
   pull_request:
-    branches: [ master ]
+    branches: [ test ]
 
 jobs:
-  test_github_action:
+  test:
     runs-on: ubuntu-latest
-    name: Swagger Editor Validate - Repo integrity
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '12'
-      - run: npm ci
-      - run: npm run lint
-
-
-  test_swagger_editor_validate_service:
-    runs-on: ubuntu-latest
-    name: Swagger Editor Validate Service
+    name: Swagger Editor Validate Test
 
     # Service containers to run with `runner-job`
     services:
@@ -40,35 +27,4 @@ jobs:
         uses: char0n/swagger-editor-validate@master
         with:
           swagger-editor-url: http://localhost/
-          definition-file: examples/openapi-2-0.yaml
-
-  test_swagger_editor_validate_remote:
-    runs-on: ubuntu-latest
-    name: Swagger Editor Validate Remote
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Validate OpenAPI definition
-        uses: char0n/swagger-editor-validate@master
-        with:
-          definition-file: examples/openapi-2-0.yaml
-
-  merge-me:
-    name: Merge me!
-    if: github.actor == 'dependabot[bot]'
-    runs-on: ubuntu-latest
-
-    needs: [test_github_action, test_swagger_editor_validate_service, test_swagger_editor_validate_remote]
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
-    steps:
-      - name: Merge me!
-        uses: ridedott/merge-me-action@master
-        with:
-          GITHUB_LOGIN: dependabot[bot]
-          GITHUB_TOKEN: ${{ secrets.MERGE_ME_GITHUB_TOKEN }}
-          MERGE_METHOD: SQUASH
-          PRESET: DEPENDABOT_MINOR
+          definition-file: examples/oas.yaml
