@@ -1,38 +1,33 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
 const core = require('@actions/core');
 
-const hasNoApiDefinition = async (page) => {
-  return page.evaluate(() => {
+const hasNoApiDefinition = async (page) =>
+  page.evaluate(() => {
     const element = document.querySelector('.swagger-ui .loading-container h4');
     if (element === null) {
       return false;
     }
     return element.innerHTML === 'No API definition provided.';
-  })
-};
+  });
 
-const isUnableToRenderDefinition = async (page) => {
-  return page.evaluate(() => {
+const isUnableToRenderDefinition = async (page) =>
+  page.evaluate(() => {
     const element = document.querySelector('.swagger-ui .version-pragma');
     return element !== null;
   });
-};
 
-const hasErrors = async (page) => {
-  return page.evaluate(() => {
+const hasErrors = async (page) =>
+  page.evaluate(() => {
     const element = document.querySelector('.swagger-ui .errors-wrapper');
     return element !== null;
   });
-};
 
 const parseError = async (errorElement) => {
-  const location = await errorElement.$eval('h4', e => e.innerText);
-  const message = await errorElement.$eval('.message', e => e.innerText);
-  const errorLine = await errorElement.$eval('.error-line', e => e.innerText);
+  const location = await errorElement.$eval('h4', (e) => e.innerText);
+  const message = await errorElement.$eval('.message', (e) => e.innerText);
+  const errorLine = await errorElement.$eval('.error-line', (e) => e.innerText);
 
   return {
     location,
@@ -42,11 +37,14 @@ const parseError = async (errorElement) => {
 };
 
 const parseErrors = async (page) => {
-  const errorElements = await page.$$('.swagger-ui .errors-wrapper .errors .error-wrapper');
+  const errorElements = await page.$$(
+    '.swagger-ui .errors-wrapper .errors .error-wrapper'
+  );
   const errors = [];
 
+  // eslint-disable-next-line no-restricted-syntax
   for (const errorElement of errorElements) {
-    const error = await parseError(errorElement);
+    const error = await parseError(errorElement); // eslint-disable-line no-await-in-loop
     errors.push(error);
   }
 
@@ -56,7 +54,10 @@ const parseErrors = async (page) => {
 (async () => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  const definitionFilePath = path.join(process.env.GITHUB_WORKSPACE, process.env.DEFINITION_FILE);
+  const definitionFilePath = path.join(
+    process.env.GITHUB_WORKSPACE,
+    process.env.DEFINITION_FILE
+  );
 
   try {
     const definition = fs.readFileSync(definitionFilePath).toString();
@@ -77,12 +78,12 @@ const parseErrors = async (page) => {
       core.setFailed('\u001b[38;2;255;0;0mUnable to render this definition.');
     } else if (await hasErrors(page)) {
       // definition has errors
-      core.setFailed('\u001b[38;2;255;0;1mDefinition contains errors.')
+      core.setFailed('\u001b[38;2;255;0;1mDefinition contains errors.');
       const errors = await parseErrors(page);
-      errors.forEach(error => {
-        core.error(error.location)
-        error.messages.forEach(message => core.error(message));
-        core.error(`at line ${error.lineNo}`)
+      errors.forEach((error) => {
+        core.error(error.location);
+        error.messages.forEach((message) => core.error(message));
+        core.error(`at line ${error.lineNo}`);
         core.error('');
       });
     } else {

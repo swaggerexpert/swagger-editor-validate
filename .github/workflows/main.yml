@@ -1,9 +1,28 @@
-on: [push]
+name: Swagger Editor Validate CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  test_swagger_editor_validator_service:
+  test_github_action:
     runs-on: ubuntu-latest
-    name: Swagger Editor Validator Service
+    name: Swagger Editor Validate - Repo integrity
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm ci
+      - run: npm run lint
+
+
+  test_swagger_editor_validate_service:
+    runs-on: ubuntu-latest
+    name: Swagger Editor Validate Service
 
     # Service containers to run with `runner-job`
     services:
@@ -23,9 +42,9 @@ jobs:
           swagger-editor-url: http://localhost/
           definition-file: examples/openapi-2-0.yaml
 
-  test_swagger_editor_validator_remote:
+  test_swagger_editor_validate_remote:
     runs-on: ubuntu-latest
-    name: Swagger Editor Validator Remote
+    name: Swagger Editor Validate Remote
 
     steps:
       - uses: actions/checkout@v2
