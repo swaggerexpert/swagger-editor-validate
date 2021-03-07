@@ -1,6 +1,11 @@
 # Swagger Editor Validate Github Action
 
-This GitHub Actions validates OpenAPI (OAS) definition file using Swagger Editor.
+This GitHub Action validates OpenAPI (OAS) definition file using [Swagger Editor](https://editor.swagger.io/).
+
+It's handy for use-cases when OAS definition is maintained manually and is checked within the git.
+If modifications are made to the OAS definition you want to make sure that there are no errors
+introduced by modifications. Errors that would appear in Swagger Editor when the OAS definition
+would be pasted inside it.
 
 ## Inputs
 
