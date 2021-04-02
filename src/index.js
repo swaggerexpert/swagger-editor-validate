@@ -68,7 +68,7 @@ const parseErrors = async (page) => {
       localStorage.setItem('swagger-editor-content', item);
     }, definition);
     await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
-    await page.waitForTimeout(10000)
+    await page.waitForTimeout(10000);
     await page.waitForSelector('.swagger-ui div', { visible: true });
 
     if (await hasNoApiDefinition(page)) {
