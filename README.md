@@ -12,7 +12,7 @@ would be pasted inside it.
 ![image](https://user-images.githubusercontent.com/193286/110244618-dcebe580-7f5f-11eb-8dd8-cb31f499761e.png)
 
 If you're interested about technical design and evolution of this GitHub Action please
-read our [release article](https://www.linkedin.com/pulse/how-validate-openapi-definitions-swagger-editor-using-vladim%25C3%25ADr-gorej/).
+read our [release article](https://vladimirgorej.com/blog/how-to-validate-openapi-definitions-in-swagger-editor-using-github-actions/).
 
 ## Inputs
 
