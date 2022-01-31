@@ -26,6 +26,9 @@ file is going to be validated. Default `https://editor.swagger.io/`.
 **Required** Defines path of [OAS](https://github.com/OAI/OpenAPI-Specification) definition file that exists
 as a physical file in your repository.
 
+### `timeout`
+
+**Optional** Defines the timeout for validating the specification. Can be useful for large specifications. Defaults to 30 seconds. The value is interpreted as the number of seconds.
 
 ## Example usage
 

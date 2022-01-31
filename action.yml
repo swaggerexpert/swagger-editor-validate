@@ -9,6 +9,10 @@ inputs:
   definition-file:
     description: Path to definition file
     required: true
+  timeout:
+    description: Timeout for validating the file in seconds.
+    required: false
+    default: "30"
 runs:
   using: composite
   steps:

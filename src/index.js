@@ -54,6 +54,14 @@ const parseErrors = async (page) => {
 (async () => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
+  let timeout = Number(core.getInput('timeout'));
+  if (Number.isNaN(timeout)) {
+    core.info(
+      `Timeout must be a number, but instead got: ${timeout}. Will set to default of '30' (seconds).`
+    );
+    timeout = 30;
+  }
+  await page.setDefaultNavigationTimeout(timeout * 1000);
   const definitionFilePath = path.join(
     process.env.GITHUB_WORKSPACE,
     process.env.DEFINITION_FILE
