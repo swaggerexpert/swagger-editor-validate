@@ -55,7 +55,7 @@ jobs:
 
   test_swagger_editor_ignore_error:
     runs-on: ubuntu-latest
-    name: Swagger Editor Validate Remote
+    name: Swagger Editor Ignore Errors
 
     steps:
       - uses: actions/checkout@v2

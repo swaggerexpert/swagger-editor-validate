@@ -10,7 +10,7 @@ inputs:
     description: Path to definition file
     required: true
   ignore-error:
-    description: JavaScript file containg predicate for determining if the error should be ignored or not
+    description: JavaScript file containing predicate for determining if the error should be ignored or not
     required: false
 runs:
   using: composite
