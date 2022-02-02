@@ -3,6 +3,19 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const core = require('@actions/core');
 
+const shouldIgnoreError = (error) => {
+  const predicatePath = path.join(
+    process.env.GITHUB_WORKSPACE,
+    process.env.IGNORE_ERROR
+  );
+  if (fs.existsSync(predicatePath)) {
+    const predicate = require(predicatePath); // eslint-disable-line import/no-dynamic-require, global-require
+    return predicate(error);
+  }
+
+  return false;
+};
+
 const hasNoApiDefinition = async (page) =>
   page.evaluate(() => {
     const element = document.querySelector('.swagger-ui .loading-container h4');
@@ -18,12 +31,6 @@ const isUnableToRenderDefinition = async (page) =>
     return element !== null;
   });
 
-const hasErrors = async (page) =>
-  page.evaluate(() => {
-    const element = document.querySelector('.swagger-ui .errors-wrapper');
-    return element !== null;
-  });
-
 const parseError = async (errorElement) => {
   const location = await errorElement.$eval('h4', (e) => e.innerText);
   const message = await errorElement.$eval('.message', (e) => e.innerText);
@@ -31,8 +38,8 @@ const parseError = async (errorElement) => {
 
   return {
     location,
-    messages: message.split('\n'),
-    lineNo: errorLine.replace('Jump to line ', ''),
+    message,
+    lineNo: Number(errorLine.replace('Jump to line ', '')),
   };
 };
 
@@ -71,19 +78,22 @@ const parseErrors = async (page) => {
     await page.waitForTimeout(10000);
     await page.waitForSelector('.swagger-ui div', { visible: true });
 
+    const errors = (await parseErrors(page)).filter(
+      (error) => !shouldIgnoreError(error)
+    );
+
     if (await hasNoApiDefinition(page)) {
       // no API definition provided
       core.setFailed('\u001b[38;2;255;0;0mNo API definition provided.');
     } else if (await isUnableToRenderDefinition(page)) {
       // unable to render definition
       core.setFailed('\u001b[38;2;255;0;0mUnable to render this definition.');
-    } else if (await hasErrors(page)) {
+    } else if (errors.length > 0) {
       // definition has errors
       core.setFailed('\u001b[38;2;255;0;1mDefinition contains errors.');
-      const errors = await parseErrors(page);
       errors.forEach((error) => {
         core.error(error.location);
-        error.messages.forEach((message) => core.error(message));
+        error.message.split('\n').forEach((message) => core.error(message));
         core.error(`at line ${error.lineNo}`);
         core.error('');
       });

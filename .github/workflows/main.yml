@@ -52,3 +52,15 @@ jobs:
         uses: char0n/swagger-editor-validate@master
         with:
           definition-file: examples/openapi-2-0.yaml
+
+  test_swagger_editor_ignore_error:
+    runs-on: ubuntu-latest
+    name: Swagger Editor Validate Remote
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate OpenAPI definition
+        uses: char0n/swagger-editor-validate@master
+        with:
+          definition-file: examples/openapi-2-0-ignore-error.yaml
+          ignore-error: examples/ignore-error.js
