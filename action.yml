@@ -9,12 +9,15 @@ inputs:
   definition-file:
     description: Path to definition file
     required: true
+  ignore-error:
+    description: JavaScript file containing predicate for determining if the error should be ignored or not
+    required: false
 runs:
   using: composite
   steps:
     - run: cd ${{ github.action_path }} && npm install
       shell: bash
-    - run: cd ${{ github.action_path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} node src/index.js
+    - run: cd ${{ github.action_path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} node src/index.js
       shell: bash
 branding:
   icon: 'file-text'

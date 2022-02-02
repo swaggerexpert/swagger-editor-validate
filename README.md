@@ -26,6 +26,10 @@ file is going to be validated. Default `https://editor.swagger.io/`.
 **Required** Defines path of [OAS](https://github.com/OAI/OpenAPI-Specification) definition file that exists
 as a physical file in your repository.
 
+### `ignore-error`
+
+**Optional** Defines path to JavaScript file containing predicate for determining if the error should be ignored or not.
+
 
 ## Example usage
 
