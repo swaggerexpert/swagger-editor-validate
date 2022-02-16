@@ -4,13 +4,15 @@ const puppeteer = require('puppeteer');
 const core = require('@actions/core');
 
 const shouldIgnoreError = (error) => {
-  const predicatePath = path.join(
-    process.env.GITHUB_WORKSPACE,
-    process.env.IGNORE_ERROR
-  );
-  if (fs.existsSync(predicatePath)) {
-    const predicate = require(predicatePath); // eslint-disable-line import/no-dynamic-require, global-require
-    return predicate(error);
+  if (process.env.IGNORE_ERROR) {
+    const predicatePath = path.join(
+      process.env.GITHUB_WORKSPACE,
+      process.env.IGNORE_ERROR
+    );
+    if (fs.existsSync(predicatePath)) {
+      const predicate = require(predicatePath); // eslint-disable-line import/no-dynamic-require, global-require
+      return predicate(error);
+    }
   }
 
   return false;
