@@ -69,7 +69,7 @@ jobs:
         if: steps.validate.outcome != 'failure'
         run: exit 1
       - name: Check for error message
-        if: !steps.validate.outputs.stdout.contains('Definition contains errors')
+        if: ${{ !contains('Definition contains errors', steps.validate.outputs.stdout.contains) }}
         run: exit 1
 
   test_swagger_editor_ignore_error:
