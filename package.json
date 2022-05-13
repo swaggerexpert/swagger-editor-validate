@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.8.1",
-    "puppeteer": "^13.7.0"
+    "puppeteer": "^14.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",
