@@ -12,7 +12,7 @@
     "tunnel": "^0.0.6"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.0.3",
+    "@commitlint/cli": "^17.1.1",
     "@commitlint/config-conventional": "^17.0.3",
     "eslint": "^8.22.0",
     "eslint-config-airbnb-base": "^15.0.0",
