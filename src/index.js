@@ -78,7 +78,9 @@ const parseErrors = async (page) => {
     }, definition);
     await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
     await page.waitForTimeout(10000);
-    await page.waitForSelector('.swagger-ui div', { visible: true });
+    await page.waitForSelector('.swagger-ui div:nth-child(2)', {
+      visible: true,
+    });
 
     const errors = (await parseErrors(page)).filter(
       (error) => !shouldIgnoreError(error)
