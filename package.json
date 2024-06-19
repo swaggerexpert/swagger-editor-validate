@@ -30,13 +30,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/char0n/swagger-editor-validate.git"
+    "url": "https://github.com/swaggerexpert/swagger-editor-validate.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/char0n/swagger-editor-validate/issues"
+    "url": "https://github.com/swaggerexpert/swagger-editor-validate/issues"
   },
-  "homepage": "https://github.com/char0n/swagger-editor-validate#readme"
+  "homepage": "https://github.com/swaggerexpert/swagger-editor-validate#readme"
 }
