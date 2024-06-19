@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Validate OpenAPI definition
-        uses: char0n/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@master
         with:
           swagger-editor-url: http://localhost/
           definition-file: examples/openapi-2-0.yaml
@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Validate OpenAPI definition
-        uses: char0n/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@master
         with:
           definition-file: examples/openapi-2-0.yaml
 
@@ -62,7 +62,7 @@ jobs:
       - name: Validate OpenAPI definition
         continue-on-error: true
         id: validate
-        uses: char0n/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@master
         with:
           definition-file: examples/openapi-2-0-error.yaml
       - name: Check for failure
@@ -79,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Validate OpenAPI definition
-        uses: char0n/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@master
         with:
           definition-file: examples/openapi-2-0-error.yaml
           ignore-error: examples/ignore-error.js
