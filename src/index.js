@@ -61,7 +61,7 @@ const parseErrors = async (page) => {
 };
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   const definitionFilePath = path.join(
     process.env.GITHUB_WORKSPACE,
