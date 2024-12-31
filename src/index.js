@@ -76,13 +76,15 @@ const parseErrors = async (page) => {
 
     await page.goto(process.env.SWAGGER_EDITOR_URL);
     await page.waitForSelector('.info .main .title');
+
+    // simulate paste action
     await page.evaluate((item) => {
-      localStorage.setItem('swagger-editor-content', item);
+      navigator.clipboard.writeText(item);
     }, definition);
-    await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
-    await new Promise((resolve) => {
-      setTimeout(resolve, 10000);
-    });
+    await page.keyboard.down('Control');
+    await page.keyboard.press('KeyV');
+    await page.keyboard.up('Control');
+
     await page.waitForSelector('.swagger-ui div:nth-child(2)', {
       visible: true,
     });
