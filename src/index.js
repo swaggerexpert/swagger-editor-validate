@@ -62,7 +62,7 @@ const parseErrors = async (page) => {
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: ['--no-sandbox'],
   });
   const page = await browser.newPage();
@@ -74,7 +74,8 @@ const parseErrors = async (page) => {
   try {
     const definition = fs.readFileSync(definitionFilePath).toString();
 
-    await page.goto(process.env.SWAGGER_EDITOR_URL);
+    // await page.goto(process.env.SWAGGER_EDITOR_URL);
+    await page.goto('https://editor.swagger.io');
     await page.waitForSelector('.info .main .title', { visible: true });
     await page.waitForSelector('.ace_text-input', { visible: true });
 
@@ -89,7 +90,7 @@ const parseErrors = async (page) => {
     await page.keyboard.up('Control');
     await page.waitForFunction(
       (text) => document.body.innerText.includes(text),
-      { timeout: 5000 },
+      { timeout: 10000 },
       'No API definition provided'
     );
     // type OpenAPI description into editor
