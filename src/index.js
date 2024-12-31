@@ -1,7 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import puppeteer from 'puppeteer';
 import core from '@actions/core';
+
+const require = createRequire(import.meta.url);
 
 const shouldIgnoreError = (error) => {
   if (process.env.IGNORE_ERROR) {
