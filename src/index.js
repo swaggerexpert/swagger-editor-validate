@@ -1,21 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { createRequire } from 'node:module';
 import puppeteer from 'puppeteer';
 import core from '@actions/core';
 
-const require = createRequire(import.meta.url);
+let ignoreErrorPredicate;
+if (process.env.IGNORE_ERROR) {
+  const predicatePath = path.join(
+    process.env.GITHUB_WORKSPACE,
+    process.env.IGNORE_ERROR
+  );
+  try {
+    ({ default: ignoreErrorPredicate } = await import(predicatePath));
+  } catch {
+    ignoreErrorPredicate = null;
+  }
+}
 
 const shouldIgnoreError = (error) => {
-  if (process.env.IGNORE_ERROR) {
-    const predicatePath = path.join(
-      process.env.GITHUB_WORKSPACE,
-      process.env.IGNORE_ERROR
-    );
-    if (fs.existsSync(predicatePath)) {
-      const predicate = require(predicatePath); // eslint-disable-line import/no-dynamic-require, global-require
-      return predicate(error);
-    }
+  if (typeof ignoreErrorPredicate === 'function') {
+    return ignoreErrorPredicate(error);
   }
 
   return false;
@@ -56,7 +59,7 @@ const parseErrors = async (page) => {
       '.swagger-ui .errors-wrapper .errors .error-wrapper',
       { visible: true, timeout: 10000 }
     );
-  } catch (error) {
+  } catch {
     return errors;
   }
 
