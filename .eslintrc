@@ -4,8 +4,7 @@
     "node": true
   },
   "globals": {
-    "document": "readonly",
-    "localStorage": "readonly"
+    "document": "readonly"
   },
   "parserOptions": {
     "sourceType": "script"

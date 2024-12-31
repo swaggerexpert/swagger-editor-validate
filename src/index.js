@@ -46,10 +46,20 @@ const parseError = async (errorElement) => {
 };
 
 const parseErrors = async (page) => {
+  const errors = [];
+
+  try {
+    await page.waitForSelector(
+      '.swagger-ui .errors-wrapper .errors .error-wrapper',
+      { visible: true, timeout: 10000 }
+    );
+  } catch (error) {
+    return errors;
+  }
+
   const errorElements = await page.$$(
     '.swagger-ui .errors-wrapper .errors .error-wrapper'
   );
-  const errors = [];
 
   // eslint-disable-next-line no-restricted-syntax
   for (const errorElement of errorElements) {
@@ -75,14 +85,37 @@ const parseErrors = async (page) => {
     const definition = fs.readFileSync(definitionFilePath).toString();
 
     await page.goto(process.env.SWAGGER_EDITOR_URL);
-    await page.waitForSelector('.info .main .title');
-    await page.evaluate((item) => {
-      localStorage.setItem('swagger-editor-content', item);
-    }, definition);
-    await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] });
-    await new Promise((resolve) => {
-      setTimeout(resolve, 10000);
-    });
+    await page.waitForSelector('.info .main .title', { visible: true });
+    await page.waitForSelector('.ace_text-input', { visible: true });
+
+    await page.focus('.ace_text-input');
+    // select all
+    await page.keyboard.down('Control');
+    await page.keyboard.press('KeyA');
+    await page.keyboard.up('Control');
+    // cut
+    await page.keyboard.down('Control');
+    await page.keyboard.press('Backspace');
+    await page.keyboard.up('Control');
+    await page.waitForFunction(
+      (text) => document.body.innerText.includes(text),
+      { timeout: 10000 },
+      'No API definition provided'
+    );
+    // paste in the OpenAPI description
+    await page.evaluate(
+      (selector, text) => {
+        const inputElement = document.querySelector(selector);
+        if (inputElement) {
+          inputElement.value = text;
+          inputElement.dispatchEvent(new Event('input', { bubbles: true })); // Trigger input event
+        }
+      },
+      '.ace_text-input',
+      definition
+    );
+
+    // new definition rendered
     await page.waitForSelector('.swagger-ui div:nth-child(2)', {
       visible: true,
     });
