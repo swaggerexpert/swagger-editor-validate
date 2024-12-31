@@ -33,17 +33,6 @@ const isUnableToRenderDefinition = async (page) =>
     return element !== null;
   });
 
-const waitGracefullyForErrors = async (page) => {
-  try {
-    return await page.waitForSelector(
-      '.swagger-ui .errors-wrapper .errors .error-wrapper',
-      { visible: true, timeout: 10000 }
-    );
-  } catch (error) {
-    return null;
-  }
-};
-
 const parseError = async (errorElement) => {
   const location = await errorElement.$eval('h4', (e) => e.innerText);
   const message = await errorElement.$eval('.message', (e) => e.innerText);
@@ -57,10 +46,20 @@ const parseError = async (errorElement) => {
 };
 
 const parseErrors = async (page) => {
+  const errors = [];
+
+  try {
+    await page.waitForSelector(
+      '.swagger-ui .errors-wrapper .errors .error-wrapper',
+      { visible: true, timeout: 10000 }
+    );
+  } catch (error) {
+    return errors;
+  }
+
   const errorElements = await page.$$(
     '.swagger-ui .errors-wrapper .errors .error-wrapper'
   );
-  const errors = [];
 
   // eslint-disable-next-line no-restricted-syntax
   for (const errorElement of errorElements) {
@@ -121,7 +120,6 @@ const parseErrors = async (page) => {
       visible: true,
     });
 
-    await waitGracefullyForErrors(page);
     const errors = (await parseErrors(page)).filter(
       (error) => !shouldIgnoreError(error)
     );
