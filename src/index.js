@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const puppeteer = require('puppeteer');
-const core = require('@actions/core');
+import fs from 'node:fs';
+import path from 'node:path';
+import puppeteer from 'puppeteer';
+import core from '@actions/core';
 
 const shouldIgnoreError = (error) => {
   if (process.env.IGNORE_ERROR) {
@@ -70,82 +70,80 @@ const parseErrors = async (page) => {
   return errors;
 };
 
-(async () => {
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox'],
-  });
-  const page = await browser.newPage();
-  const definitionFilePath = path.join(
-    process.env.GITHUB_WORKSPACE,
-    process.env.DEFINITION_FILE
+const browser = await puppeteer.launch({
+  headless: true,
+  args: ['--no-sandbox'],
+});
+const page = await browser.newPage();
+const definitionFilePath = path.join(
+  process.env.GITHUB_WORKSPACE,
+  process.env.DEFINITION_FILE
+);
+
+try {
+  const definition = fs.readFileSync(definitionFilePath).toString();
+
+  await page.goto(process.env.SWAGGER_EDITOR_URL);
+  await page.waitForSelector('.info .main .title', { visible: true });
+  await page.waitForSelector('.ace_text-input', { visible: true });
+
+  await page.focus('.ace_text-input');
+  // select all
+  await page.keyboard.down('Control');
+  await page.keyboard.press('KeyA');
+  await page.keyboard.up('Control');
+  // cut
+  await page.keyboard.down('Control');
+  await page.keyboard.press('Backspace');
+  await page.keyboard.up('Control');
+  await page.waitForFunction(
+    (text) => document.body.innerText.includes(text),
+    { timeout: 10000 },
+    'No API definition provided'
+  );
+  // paste in the OpenAPI description
+  await page.evaluate(
+    (selector, text) => {
+      const inputElement = document.querySelector(selector);
+      if (inputElement) {
+        inputElement.value = text;
+        inputElement.dispatchEvent(new Event('input', { bubbles: true })); // Trigger input event
+      }
+    },
+    '.ace_text-input',
+    definition
   );
 
-  try {
-    const definition = fs.readFileSync(definitionFilePath).toString();
+  // new definition rendered
+  await page.waitForSelector('.swagger-ui div:nth-child(2)', {
+    visible: true,
+  });
 
-    await page.goto(process.env.SWAGGER_EDITOR_URL);
-    await page.waitForSelector('.info .main .title', { visible: true });
-    await page.waitForSelector('.ace_text-input', { visible: true });
+  const errors = (await parseErrors(page)).filter(
+    (error) => !shouldIgnoreError(error)
+  );
 
-    await page.focus('.ace_text-input');
-    // select all
-    await page.keyboard.down('Control');
-    await page.keyboard.press('KeyA');
-    await page.keyboard.up('Control');
-    // cut
-    await page.keyboard.down('Control');
-    await page.keyboard.press('Backspace');
-    await page.keyboard.up('Control');
-    await page.waitForFunction(
-      (text) => document.body.innerText.includes(text),
-      { timeout: 10000 },
-      'No API definition provided'
-    );
-    // paste in the OpenAPI description
-    await page.evaluate(
-      (selector, text) => {
-        const inputElement = document.querySelector(selector);
-        if (inputElement) {
-          inputElement.value = text;
-          inputElement.dispatchEvent(new Event('input', { bubbles: true })); // Trigger input event
-        }
-      },
-      '.ace_text-input',
-      definition
-    );
-
-    // new definition rendered
-    await page.waitForSelector('.swagger-ui div:nth-child(2)', {
-      visible: true,
+  if (await hasNoApiDefinition(page)) {
+    // no API definition provided
+    core.setFailed('\u001b[38;2;255;0;0mNo API definition provided.');
+  } else if (await isUnableToRenderDefinition(page)) {
+    // unable to render definition
+    core.setFailed('\u001b[38;2;255;0;0mUnable to render this definition.');
+  } else if (errors.length > 0) {
+    // definition has errors
+    core.setFailed('\u001b[38;2;255;0;1mDefinition contains errors.');
+    errors.forEach((error) => {
+      core.error(error.location);
+      error.message.split('\n').forEach((message) => core.error(message));
+      core.error(`at line ${error.lineNo}`);
+      core.error('');
     });
-
-    const errors = (await parseErrors(page)).filter(
-      (error) => !shouldIgnoreError(error)
-    );
-
-    if (await hasNoApiDefinition(page)) {
-      // no API definition provided
-      core.setFailed('\u001b[38;2;255;0;0mNo API definition provided.');
-    } else if (await isUnableToRenderDefinition(page)) {
-      // unable to render definition
-      core.setFailed('\u001b[38;2;255;0;0mUnable to render this definition.');
-    } else if (errors.length > 0) {
-      // definition has errors
-      core.setFailed('\u001b[38;2;255;0;1mDefinition contains errors.');
-      errors.forEach((error) => {
-        core.error(error.location);
-        error.message.split('\n').forEach((message) => core.error(message));
-        core.error(`at line ${error.lineNo}`);
-        core.error('');
-      });
-    } else {
-      core.info('\u001b[1mDefinition successfully validated by Swagger Editor');
-    }
-  } catch (error) {
-    core.setFailed('Error while validating in Swagger Editor');
-    core.error(error);
-  } finally {
-    await browser.close();
+  } else {
+    core.info('\u001b[1mDefinition successfully validated by Swagger Editor');
   }
-})();
+} catch (error) {
+  core.setFailed('Error while validating in Swagger Editor');
+  core.error(error);
+} finally {
+  await browser.close();
+}
