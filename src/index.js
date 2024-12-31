@@ -77,6 +77,9 @@ const parseErrors = async (page) => {
     await page.goto(process.env.SWAGGER_EDITOR_URL);
     await page.waitForSelector('.info .main .title', { visible: true });
     await page.waitForSelector('.ace_text-input', { visible: true });
+    await new Promise((resolve) => {
+      setTimeout(resolve, 10000);
+    });
 
     await page.focus('.ace_text-input');
     // simulate select all
