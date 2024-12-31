@@ -87,8 +87,10 @@ const parseErrors = async (page) => {
     await page.keyboard.down('Control');
     await page.keyboard.press('Backspace');
     await page.keyboard.up('Control');
-    await page.waitForSelector(
-      'xpath/.//h4[normalize-space(.)="No API definition provided"]'
+    await page.waitForFunction(
+      (text) => document.body.innerText.includes(text),
+      { timeout: 5000 },
+      'No API definition provided'
     );
     // type OpenAPI description into editor
     await page.type('.ace_text-input', definition);
