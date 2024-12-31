@@ -75,16 +75,22 @@ const parseErrors = async (page) => {
     const definition = fs.readFileSync(definitionFilePath).toString();
 
     await page.goto(process.env.SWAGGER_EDITOR_URL);
-    await page.waitForSelector('.info .main .title');
+    await page.waitForSelector('.info .main .title', { visible: true });
+    await page.waitForSelector('.ace_text-input', { visible: true });
 
-    // simulate paste action
-    await page.evaluate((item) => {
-      navigator.clipboard.writeText(item);
-    }, definition);
+    await page.focus('.ace_text-input');
+    // simulate select all
     await page.keyboard.down('Control');
-    await page.keyboard.press('KeyV');
+    await page.keyboard.press('KeyA');
     await page.keyboard.up('Control');
+    // simulate cut
+    await page.keyboard.down('Control');
+    await page.keyboard.press('Backspace');
+    await page.keyboard.up('Control');
+    // type OpenAPI description into editor
+    await page.type('.ace_text-input', definition);
 
+    // new definition rendered
     await page.waitForSelector('.swagger-ui div:nth-child(2)', {
       visible: true,
     });
