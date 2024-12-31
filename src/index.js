@@ -109,6 +109,15 @@ const parseErrors = async (page) => {
     await page.waitForSelector('.swagger-ui div:nth-child(2)', {
       visible: true,
     });
+    // gracefully wait for errors to appear
+    try {
+      await page.waitForSelector(
+        '.swagger-ui .errors-wrapper .errors .error-wrapper',
+        { visible: true, timeout: 10000 }
+      );
+    } catch (e) {
+      /* noop */
+    }
 
     const errors = (await parseErrors(page)).filter(
       (error) => !shouldIgnoreError(error)
