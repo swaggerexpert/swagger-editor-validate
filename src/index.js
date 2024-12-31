@@ -74,8 +74,7 @@ const parseErrors = async (page) => {
   try {
     const definition = fs.readFileSync(definitionFilePath).toString();
 
-    // await page.goto(process.env.SWAGGER_EDITOR_URL);
-    await page.goto('https://editor.swagger.io');
+    await page.goto(process.env.SWAGGER_EDITOR_URL);
     await page.waitForSelector('.info .main .title', { visible: true });
     await page.waitForSelector('.ace_text-input', { visible: true });
 
