@@ -77,9 +77,6 @@ const parseErrors = async (page) => {
     await page.goto(process.env.SWAGGER_EDITOR_URL);
     await page.waitForSelector('.info .main .title', { visible: true });
     await page.waitForSelector('.ace_text-input', { visible: true });
-    await new Promise((resolve) => {
-      setTimeout(resolve, 10000);
-    });
 
     await page.focus('.ace_text-input');
     // simulate select all
@@ -95,8 +92,18 @@ const parseErrors = async (page) => {
       { timeout: 10000 },
       'No API definition provided'
     );
-    // type OpenAPI description into editor
-    await page.type('.ace_text-input', definition);
+    // simulate typing
+    await page.evaluate(
+      (selector, text) => {
+        const inputElement = document.querySelector(selector);
+        if (inputElement) {
+          inputElement.value = text;
+          inputElement.dispatchEvent(new Event('input', { bubbles: true })); // Trigger input event
+        }
+      },
+      '.ace_text-input',
+      definition
+    );
 
     // new definition rendered
     await page.waitForSelector('.swagger-ui div:nth-child(2)', {
