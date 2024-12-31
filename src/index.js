@@ -33,6 +33,17 @@ const isUnableToRenderDefinition = async (page) =>
     return element !== null;
   });
 
+const waitGracefullyForErrors = async (page) => {
+  try {
+    return await page.waitForSelector(
+      '.swagger-ui .errors-wrapper .errors .error-wrapper',
+      { visible: true, timeout: 10000 }
+    );
+  } catch (error) {
+    return null;
+  }
+};
+
 const parseError = async (errorElement) => {
   const location = await errorElement.$eval('h4', (e) => e.innerText);
   const message = await errorElement.$eval('.message', (e) => e.innerText);
@@ -79,11 +90,11 @@ const parseErrors = async (page) => {
     await page.waitForSelector('.ace_text-input', { visible: true });
 
     await page.focus('.ace_text-input');
-    // simulate select all
+    // select all
     await page.keyboard.down('Control');
     await page.keyboard.press('KeyA');
     await page.keyboard.up('Control');
-    // simulate cut
+    // cut
     await page.keyboard.down('Control');
     await page.keyboard.press('Backspace');
     await page.keyboard.up('Control');
@@ -92,7 +103,7 @@ const parseErrors = async (page) => {
       { timeout: 10000 },
       'No API definition provided'
     );
-    // simulate typing
+    // paste in the OpenAPI description
     await page.evaluate(
       (selector, text) => {
         const inputElement = document.querySelector(selector);
@@ -109,16 +120,8 @@ const parseErrors = async (page) => {
     await page.waitForSelector('.swagger-ui div:nth-child(2)', {
       visible: true,
     });
-    // gracefully wait for errors to appear
-    try {
-      await page.waitForSelector(
-        '.swagger-ui .errors-wrapper .errors .error-wrapper',
-        { visible: true, timeout: 10000 }
-      );
-    } catch (e) {
-      /* noop */
-    }
 
+    await waitGracefullyForErrors(page);
     const errors = (await parseErrors(page)).filter(
       (error) => !shouldIgnoreError(error)
     );
