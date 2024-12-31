@@ -12,4 +12,4 @@ const shouldIgnoreError = (error) => {
   return false;
 };
 
-module.exports = shouldIgnoreError;
+export default shouldIgnoreError;

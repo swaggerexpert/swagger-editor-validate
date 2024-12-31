@@ -6,12 +6,14 @@
   "directories": {
     "example": "examples"
   },
+  "type": "module",
   "dependencies": {
     "@actions/core": "^1.11.1",
     "puppeteer": "^23.11.1",
     "tunnel": "^0.0.6"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.25.9",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "eslint": "^8.57.0",
