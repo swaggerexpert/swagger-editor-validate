@@ -12,12 +12,17 @@ inputs:
   ignore-error:
     description: JavaScript file containing predicate for determining if the error should be ignored or not
     required: false
+  action-path:
+    description: Github action folder path
+    required: false
+    default: ${{ github.action_path }}
+
 runs:
   using: composite
   steps:
-    - run: cd ${{ github.action_path }} && npm install
+    - run: cd ${{ inputs.action-path }} && npm install
       shell: bash
-    - run: cd ${{ github.action_path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} node src/index.js
+    - run: cd ${{ inputs.action-path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} node src/index.js
       shell: bash
 branding:
   icon: 'file-text'
