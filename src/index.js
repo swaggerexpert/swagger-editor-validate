@@ -57,7 +57,7 @@ const parseErrors = async (page) => {
   try {
     await page.waitForSelector(
       '.swagger-ui .errors-wrapper .errors .error-wrapper',
-      { visible: true, timeout: 10000 }
+      { visible: true }
     );
   } catch {
     return errors;
@@ -85,10 +85,13 @@ const definitionFilePath = path.join(
   process.env.GITHUB_WORKSPACE,
   process.env.DEFINITION_FILE
 );
+const defaultTimeout = parseInt(process.env.DEFAULT_TIMEOUT || '10000', 10);
 
 try {
   const definition = fs.readFileSync(definitionFilePath).toString();
 
+  page.setDefaultNavigationTimeout(defaultTimeout);
+  page.setDefaultTimeout(defaultTimeout);
   await page.goto(process.env.SWAGGER_EDITOR_URL);
   await page.waitForSelector('.info .main .title', { visible: true });
   await page.waitForSelector('.ace_text-input', { visible: true });
@@ -104,7 +107,7 @@ try {
   await page.keyboard.up('Control');
   await page.waitForFunction(
     (text) => document.body.innerText.includes(text),
-    { timeout: 10000 },
+    {},
     'No API definition provided'
   );
   // paste in the OpenAPI description

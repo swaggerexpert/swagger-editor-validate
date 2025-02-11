@@ -83,3 +83,4 @@ jobs:
         with:
           definition-file: examples/openapi-2-0-error.yaml
           ignore-error: examples/ignore-error.js
+          default-timeout: 30000
