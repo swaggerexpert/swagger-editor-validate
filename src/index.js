@@ -57,7 +57,7 @@ const parseErrors = async (page) => {
   try {
     await page.waitForSelector(
       '.swagger-ui .errors-wrapper .errors .error-wrapper',
-      { visible: true, timeout: 10000 }
+      { visible: true }
     );
   } catch {
     return errors;
@@ -106,7 +106,7 @@ try {
   await page.keyboard.up('Control');
   await page.waitForFunction(
     (text) => document.body.innerText.includes(text),
-    { timeout: 10000 },
+    {},
     'No API definition provided'
   );
   // paste in the OpenAPI description
