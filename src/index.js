@@ -90,6 +90,7 @@ const defaultTimeout = parseInt(process.env.DEFAULT_TIMEOUT || '10000', 10);
 try {
   const definition = fs.readFileSync(definitionFilePath).toString();
 
+  page.setDefaultNavigationTimeout(defaultTimeout);
   page.setDefaultTimeout(defaultTimeout);
   await page.goto(process.env.SWAGGER_EDITOR_URL);
   await page.waitForSelector('.info .main .title', { visible: true });
