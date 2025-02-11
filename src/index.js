@@ -85,10 +85,12 @@ const definitionFilePath = path.join(
   process.env.GITHUB_WORKSPACE,
   process.env.DEFINITION_FILE
 );
+const defaultTimeout = parseInt(process.env.DEFAULT_TIMEOUT || '10000', 10);
 
 try {
   const definition = fs.readFileSync(definitionFilePath).toString();
 
+  page.setDefaultTimeout(defaultTimeout);
   await page.goto(process.env.SWAGGER_EDITOR_URL);
   await page.waitForSelector('.info .main .title', { visible: true });
   await page.waitForSelector('.ace_text-input', { visible: true });

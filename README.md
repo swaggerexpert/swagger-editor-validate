@@ -31,6 +31,11 @@ as a physical file in your repository.
 **Optional** Defines path to JavaScript file containing predicate for determining if the error should be ignored or not.
 
 
+### `default-timeout`
+
+**Optional** Defines maximum time in milliseconds a script waits for certain actions or events to occur.
+
+
 ## Example usage
 
 There are two major use-cases of how to use this GitHub Action.
@@ -87,4 +92,5 @@ jobs:
         with:
           swagger-editor-url: http://localhost/
           definition-file: examples/openapi-2-0.yaml
+          default-timeout: 20000
 ```
