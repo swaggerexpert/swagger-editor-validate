@@ -18,9 +18,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: cd ${{ github.action_path }} && npm install
+    - run: cd ${GITHUB_ACTION_PATH} && npm install
       shell: bash
-    - run: cd ${{ github.action_path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} DEFAULT_TIMEOUT=${{ inputs.default-timeout }} node src/index.js
+    - run: cd ${GITHUB_ACTION_PATH} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} DEFAULT_TIMEOUT=${{ inputs.default-timeout }} node src/index.js
       shell: bash
 branding:
   icon: 'file-text'
