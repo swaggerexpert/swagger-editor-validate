@@ -54,7 +54,9 @@ jobs:
     name: Swagger Editor Validator Remote
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Validate OpenAPI definition
         uses: swaggerexpert/swagger-editor-validate@v1
         with:
@@ -80,13 +82,15 @@ jobs:
       # Label used to access the service container
       swagger-editor:
         # Docker Hub image
-        image: swaggerapi/swagger-editor
+        image: swaggerapi/swagger-editor:next-v5
         ports:
           # Maps port 8080 on service container to the host 80
           - 80:8080
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Validate OpenAPI definition
         uses: swaggerexpert/swagger-editor-validate@v1
         with:
