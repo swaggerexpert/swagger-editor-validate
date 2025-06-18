@@ -54,7 +54,7 @@ jobs:
     name: Swagger Editor Validator Remote
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Validate OpenAPI definition
         uses: swaggerexpert/swagger-editor-validate@v1
         with:
@@ -86,7 +86,7 @@ jobs:
           - 80:8080
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Validate OpenAPI definition
         uses: swaggerexpert/swagger-editor-validate@v1
         with:
