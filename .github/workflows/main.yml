@@ -12,7 +12,7 @@ jobs:
     name: Swagger Editor Validate - Repo integrity
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
@@ -35,7 +35,7 @@ jobs:
           - 80:8080
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Validate OpenAPI definition
         uses: swaggerexpert/swagger-editor-validate@master
         with:
@@ -47,7 +47,7 @@ jobs:
     name: Swagger Editor Validate Remote
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Validate OpenAPI definition
         uses: swaggerexpert/swagger-editor-validate@master
         with:
@@ -58,7 +58,7 @@ jobs:
     name: Swagger Editor Validate
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Validate OpenAPI definition
         continue-on-error: true
         id: validate
@@ -77,7 +77,7 @@ jobs:
     name: Swagger Editor Ignore Errors
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Validate OpenAPI definition
         uses: swaggerexpert/swagger-editor-validate@master
         with:
